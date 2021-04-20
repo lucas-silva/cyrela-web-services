@@ -46,7 +46,7 @@ namespace App
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BancoDeDados bancoDeDados)
     {
       if (env.IsDevelopment())
       {
@@ -65,6 +65,8 @@ namespace App
       {
         endpoints.MapControllers();
       });
+
+      bancoDeDados.Database.Migrate();
     }
   }
 }
