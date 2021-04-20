@@ -8,5 +8,10 @@ namespace App.Dominio
     public BancoDeDados(DbContextOptions options) : base(options) { }
 
     public DbSet<Vistoria> Vistorias { get; set; }
+    
+    public DbSet<Visita> Visitas { get; set; }
+    
+    public DbSet<Garantia> Garantias { get; set; }
+    
   }
 }

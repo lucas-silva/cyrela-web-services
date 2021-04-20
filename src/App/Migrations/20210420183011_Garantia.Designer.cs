@@ -3,14 +3,16 @@ using System;
 using App.Dominio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace App.Migrations
 {
     [DbContext(typeof(BancoDeDados))]
-    partial class BancoDeDadosModelSnapshot : ModelSnapshot
+    [Migration("20210420183011_Garantia")]
+    partial class Garantia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +34,10 @@ namespace App.Migrations
                     b.Property<string>("descricao")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<DateTime?>("dia_final")
+                    b.Property<DateTime>("dia_final")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("dia_inicial")
+                    b.Property<DateTime>("dia_inicial")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("nome_casa")

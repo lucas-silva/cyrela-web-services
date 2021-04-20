@@ -68,11 +68,7 @@ namespace App.WebApi.Controllers
       if (data < DateTime.Now)
         return BadRequest(new Resposta { mensagem = "A data de agendamento deve estar no futuro" });
 
-      var datas_disponiveis = this.BuscarDisponibilidadeNaAgenda();
-      var existe_data_disponivel = datas_disponiveis.Any(d => d.data == requisicao.data && d.horarios_disponiveis.Any(horario => horario == requisicao.horario));
-      if (!existe_data_disponivel)
-        return BadRequest(new Resposta { mensagem = "Data e horário informado indisponível" });
-
+      
       Banco.Vistorias.Add(new Vistoria
       {
         data_agendamento = data,
