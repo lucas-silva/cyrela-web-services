@@ -6,10 +6,10 @@ Acesse a <a href="https://github.com/lucas-silva/cyrela-web-services/raw/main/do
 
 ### Para executar a aplicação em ambiente local
 
-- Na raiz do projeto execute
+Na raiz do projeto execute:
 
-  ```
-  dotnet run --project src/Cyrela.WebApi
-  ```
+```
+dotnet run --project src/Cyrela.WebApi
+```
 
-- Abra o navegador na URL: https://localhost:5001 ou http://localhost:500
+Abra o navegador na URL: https://localhost:5001 ou http://localhost:500
