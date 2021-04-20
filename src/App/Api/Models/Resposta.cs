@@ -1,4 +1,4 @@
-namespace Cyrela.WebApi.Models
+namespace App.WebApi.Models
 {
   public class Resposta
   {

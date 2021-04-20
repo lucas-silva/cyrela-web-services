@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Cyrela.WebApi.Controllers
+namespace App.WebApi.Controllers
 {
   [ApiController]
   [Route("garantia")]

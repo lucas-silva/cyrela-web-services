@@ -1,4 +1,4 @@
-namespace Cyrela.WebApi.Models.Vistoria.Requisicoes
+namespace App.WebApi.Models.Vistoria.Requisicoes
 {
   public class AgendarVistoria
   {

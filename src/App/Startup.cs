@@ -13,8 +13,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
+using App.Dominio;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 
-namespace Cyrela.WebApi
+namespace App
 {
   public class Startup
   {
@@ -28,7 +31,8 @@ namespace Cyrela.WebApi
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-
+      var connectionString = Configuration.GetConnectionString("DefaultConnection");
+      services.AddDbContextPool<BancoDeDados>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
       services.AddControllers();
       services.AddSwaggerGen(c =>
       {

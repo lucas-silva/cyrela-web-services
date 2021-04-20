@@ -1,4 +1,4 @@
-namespace Cyrela.WebApi.Models.Vistoria.Respostas
+namespace App.WebApi.Models.Vistoria.Respostas
 {
   public class VistoriaAgendada
   {
