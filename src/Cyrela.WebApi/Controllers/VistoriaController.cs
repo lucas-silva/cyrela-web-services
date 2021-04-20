@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Cyrela.WebApi.Models;
 using Cyrela.WebApi.Models.Vistoria.Requisicoes;
 using Cyrela.WebApi.Models.Vistoria.Respostas;
@@ -15,6 +13,9 @@ namespace Cyrela.WebApi.Controllers
   public class VistoriaController : ControllerBase
   {
 
+    /// <summary>
+    /// Retorna as datas disponíveis para vistoria
+    /// </summary>
     [HttpGet]
     [Route("agenda/disponibilidade")]
     public IEnumerable<DisponibilidadeNaAgenda> BuscarDisponibilidadeNaAgenda()
@@ -28,6 +29,9 @@ namespace Cyrela.WebApi.Controllers
       };
     }
 
+    /// <summary>
+    /// Realiza o agendamento para realizar a vistoria
+    /// </summary>
     [HttpPost]
     [Route("agenda")]
     public Resposta AgendarVistoria(AgendarVistoria requisicao)
@@ -35,6 +39,9 @@ namespace Cyrela.WebApi.Controllers
       return new Resposta { mensagem = "Vistoria agendada com sucesso" };
     }
 
+    /// <summary>
+    /// Retorna as vistorias agendadas
+    /// </summary>
     [HttpGet]
     [Route("agenda")]
     public IEnumerable<VistoriaAgendada> BuscarVistoriasAgendadas()
@@ -50,6 +57,9 @@ namespace Cyrela.WebApi.Controllers
       };
     }
 
+    /// <summary>
+    /// Aprova uma vistoria e libera a entrega de chaves
+    /// </summary>
     [HttpPost]
     [Route("/vistoria/{vistoria_id:int}/aprovar")]
     public Resposta AprovarVistoria(int vitoria_id)
@@ -57,14 +67,19 @@ namespace Cyrela.WebApi.Controllers
       return new Resposta { mensagem = "Vistoria aprovada e chaves entregues!" };
     }
 
+    /// <summary>
+    /// Reprova uma vistoria
+    /// </summary>
     [HttpPost]
     [Route("/vistoria/{vistoria_id:int}/reprovar")]
-    public Resposta ReprovarVistoria(int vistoria_id, [FromBody] string problemas_encontrados)
+    public Resposta ReprovarVistoria(int vistoria_id, ReprovarVistoria requisicao)
     {
       return new Resposta { mensagem = "Vistoria reprovada" };
     }
 
-
+    /// <summary>
+    /// Cancela uma vistoria
+    /// </summary>
     [HttpDelete]
     [Route("/vistoria/{vistoria_id:int}")]
     public Resposta CancelarVistoria(int vistoria_id)
