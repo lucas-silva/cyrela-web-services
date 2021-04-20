@@ -19,9 +19,9 @@ namespace App.WebApi.Controllers
 
     private BancoDeDados Banco;
 
-    public VistoriaController(BancoDeDados dados)
+    public VistoriaController(BancoDeDados banco)
     {
-      Banco = dados;
+      Banco = banco;
     }
 
     /// <summary>
