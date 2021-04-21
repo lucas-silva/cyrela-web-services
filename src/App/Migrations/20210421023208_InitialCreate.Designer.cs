@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.Migrations
 {
     [DbContext(typeof(BancoDeDados))]
-    [Migration("20210420202228_Garantia2")]
-    partial class Garantia2
+    [Migration("20210421023208_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,9 @@ namespace App.Migrations
 
                     b.Property<DateTime>("dia_visita")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("hora_visita")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("ocorrencia")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

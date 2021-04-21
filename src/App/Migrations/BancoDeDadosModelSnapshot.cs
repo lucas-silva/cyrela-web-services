@@ -61,6 +61,9 @@ namespace App.Migrations
                     b.Property<DateTime>("dia_visita")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("hora_visita")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("ocorrencia")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 

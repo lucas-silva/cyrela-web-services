@@ -12,30 +12,41 @@ using App.Dominio.Entidades;
 using App.WebApi.Models;
 using App.WebApi.Models.Garantia.Respostas;
 using App.WebApi.Models.Vistoria.Requisicoes;
-using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI.Relational;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.VisualBasic;
 
 namespace App.WebApi.Controllers
 {
-    [ApiController,Route("garantia")]
-    public class GarantiaController
+    [ApiController, Route("ocorrencia")]
+    public class GarantiaController : ControllerBase
     {
         private CultureInfo ptBR = CultureInfo.GetCultureInfo("pt-BR");
 
         private BancoDeDados Banco;
-        #warning FIXME: eu acabei de pensar em uma solucao pra o que eu acho que esta quebrando essa request, mais eu eu vou tirar um cochilo de 1/2h antes, por causa de umas outras coisas hj eu to virado ha quase 26h
-        [HttpGet, Route("itens")]
+
+        public GarantiaController(BancoDeDados banco)
+        {
+            Banco = banco;
+        }
+        /// <summary>
+        /// Retorna o nome dos apartamentos, os itens cobertos por garantia nela, e quanto tempo falta na garantia
+        /// </summary>
+        [HttpGet, Route("garantia/itens")]
         public IEnumerable<GarantiaProduto> ListarItensDaCasa()
         {
 
             return Banco.Garantias.Select(garantia => new GarantiaProduto
             {
                 Nome = garantia.nome_casa,
+                Item = garantia.tipo_de_produto,
                 DataFinal = garantia.dia_final
             }).ToList();
         }
-
+        /// <summary>
+        /// retorna todas as datas disponiveis para agendar uma ocorrencia
+        /// </summary>
         [HttpGet, Route("agenda/disponibilidade")]
         public IEnumerable<AgendaGarantia> VerificarDisponibilidade()
         {
@@ -58,34 +69,66 @@ namespace App.WebApi.Controllers
                 }
 
                 resultados.Add(disponibilidade);
+                Banco.SaveChanges();
             }
 
             return resultados;
         }
-        #warning FIXME: honestamente eu nao lembro mais como retornar valor, se possivel acha uma solucao pra isso por favor 
+        /// <summary>
+        /// cria uma ocorrencia e define o horario de visita
+        /// </summary>
         [HttpPost, Route("agenda")]
-        public void criarOcorrencia(AgendarVistoria requisicao)
+        public ActionResult<Resposta>  criarOcorrencia(AgendarVistoria requisicao)
         {
-           /* if (!DateTime.TryParseExact($"{requisicao.data} {requisicao.horario}", "dd/MM/yyyy HH:mm", ptBR,
-                DateTimeStyles.None, out DateTime data))
-                return ApiController.BadRequest(new Resposta {mensagem = "Data ou horário fora do formato esperado"});
-*/         
-           #warning  FIXME: isso aqui tambem
-            var datas_disponiveis = this.VerificarDisponibilidade();
-            var existe_data_disponivel = datas_disponiveis.Any(d => d.data == requisicao.data && d.horarios_disponiveis.Any(horario => horario == requisicao.horario));
-            /*if (!existe_data_disponivel)
-                throw new HttpResponseMessage( 400);*/
+            
+            if (!DateTime.TryParseExact($"{requisicao.data} {requisicao.horario}", "dd/MM/yyyy HH:mm", ptBR, DateTimeStyles.None, out DateTime data))
+                return BadRequest(new Resposta { mensagem = "Data ou horário fora do formato esperado" });
+
+            if (data < DateTime.Now)
+                return BadRequest(new Resposta { mensagem = "A data de agendamento deve estar no futuro" });
+
             Banco.Visitas.Add(new Visita
             {
-                hora_visita = Convert.ToDateTime(requisicao.horario),
-                dia_visita = Convert.ToDateTime(requisicao.data)
+                hora_visita = requisicao.horario,
+                dia_visita = data
             });
+            Banco.SaveChanges();
+
+            return Ok(new Resposta { mensagem = "Visita agendada com sucesso" });
         }
-        #warning FIXME : acho que isso vai funcionar, mais graca a o banco que nao quer funcionar eu nao consigo testar, yay
+        /// <summary>
+        /// visualiza o status de todas as ocorrencias
+        /// </summary>
         [HttpGet]
         public IEnumerable<Visita> GetOcorrencias()
         {
-            return Banco.Visitas.SelectMany(visita => new List<Visita>());
+            return Banco.Visitas.Select(visita => new Visita());
+        }
+
+        /// <summary>
+        /// cria um cadastro com todas as opcoes possiveis
+        /// </summary>
+        [HttpPostAttribute, Route("cadastro/garantia")]
+        public ActionResult<Resposta> CriarCadastroCompleto(Garantia g)
+        {
+            Banco.Garantias.Add(g);
+            Banco.SaveChanges();
+            return Ok(new Resposta {mensagem = "cadastro de resposta completo"});
+        }
+        
+        /// <summary>
+        /// cria uma visita com todas as opcoes possiveis
+        /// </summary>
+        [HttpPostAttribute, Route("visita/garantia")]
+        public ActionResult<Visita> CriarVisitaCompleta(Visita v)
+        {
+            Banco.Visitas.Add(v);
+            Banco.SaveChanges();
+            return Ok(new Resposta
+            {
+                mensagem = "cadastro com sucesso"
+            });
+
         }
     }
 }

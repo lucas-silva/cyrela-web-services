@@ -17,6 +17,6 @@ namespace App.Dominio.Entidades
             
         public DateTime dia_visita { get; set; }
         
-        public DateTime hora_visita { get; set; }
+        public string hora_visita { get; set; }
     }
 }
